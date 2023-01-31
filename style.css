@@ -1,3 +1,40 @@
-#root {
-  color: red;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
+
+ul {
+  list-style: none;
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+img {
+  width: auto;
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  list-style: none;
+  border: solid grey 1px;
+  width: 400px;
+  height: 500px;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  text-align: center;;
+}
+
+p {
+  padding: 1rem;
+}
+
