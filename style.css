@@ -4,12 +4,26 @@
   box-sizing: border-box;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #E7D2CC;
+  border-bottom: 3px white solid;
+  margin-bottom: 50px;
+  height: 75px;
+}
+
+body {
+  background-color: #EEEDE7;
+}
+
 ul {
   list-style: none;
   display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 50px;
 }
 
 img {
@@ -21,11 +35,13 @@ li {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-
   list-style: none;
-  border: solid grey 1px;
+  border: solid #EEEDE7 3px;
+  border-radius: 40px;
   width: 400px;
   height: 500px;
+  background-color: #B9B7BD;
+  box-shadow: 3px 3px 20px #868B8E;
 }
 
 h1 {
