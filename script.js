@@ -30,6 +30,14 @@ let countSpan = document.createElement("span");
 document.body.appendChild(searchInput);
 document.body.appendChild(countSpan);
 
+let inputDiv = document.createElement("div");
+inputDiv.className = "input-div";
+document.body.appendChild(inputDiv);
+
+inputDiv.appendChild(select);
+inputDiv.appendChild(searchInput);
+inputDiv.appendChild(countSpan);
+
 
 
 //function for search input
