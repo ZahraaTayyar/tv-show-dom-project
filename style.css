@@ -40,10 +40,10 @@ select:hover {
 
 input {
   border-radius: 20px;
-    font-size: 17px;
-    background-color: #E7D2CC;
-    width: 20rem;
-    padding: 10px;
+  font-size: 17px;
+  background-color: #E7D2CC;
+  width: 20rem;
+  padding: 10px;
 }
 
 input:hover {
@@ -74,6 +74,7 @@ ul {
 img {
   width: auto;
   border-radius: 10px;
+  margin-top: 30px;
 }
 
 li {
@@ -85,7 +86,7 @@ li {
   border: solid white 2px;
   border-radius: 30px;
   width: 400px;
-  height: 500px;
+  height: 530px;
   background: linear-gradient(to top, white 430px, #E7D2CC 70px);
   box-shadow: 3px 3px 20px #868B8E;
 }
