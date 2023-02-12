@@ -58,6 +58,7 @@ input:hover {
   flex-wrap: wrap;
   gap: 5rem;
   margin: auto;
+  padding-bottom: 50px;
 }
 
 ul {
@@ -67,14 +68,12 @@ ul {
   justify-content: center;
   gap: 2rem;
   margin-top: 50px;
-  max-width: 1500px;
+  max-width: 2000px;
   margin: 50px auto 0 auto;
 }
 
 img {
-  width: auto;
-  border-radius: 10px;
-  margin-top: 30px;
+  width: 100%;
 }
 
 li {
@@ -84,22 +83,22 @@ li {
   gap: 1rem;
   list-style: none;
   border: solid white 2px;
-  border-radius: 30px;
-  width: 400px;
-  height: 530px;
-  background: linear-gradient(to top, white 430px, #E7D2CC 70px);
+  border-radius: 25px;
+  width: 300px;
+  height: 430px;
+  background: linear-gradient(to top, white 320px, #E7D2CC 70px);
   box-shadow: 3px 3px 20px #868B8E;
 }
 
 li:hover {
-  background: linear-gradient(to top, #E7D2CC 430px, #cfa498 70px);
+  background: linear-gradient(to top, #E7D2CC 320px, #cfa498 70px);
   border: white solid 3px;
 }
 
 h1 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin-top: 2rem;
-  text-align: center;;
+  text-align: center;
 }
 
 p {
@@ -144,7 +143,7 @@ p {
   }
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1200px) {
   .input-div {
       flex-direction: column;
       align-items: center;

@@ -1,11 +1,11 @@
-//level 350 - Get episodes from API
-const url = "https://api.tvmaze.com/shows/82/episodes";
+//level 350 - Get episodes from API using fetch
+const urlGotEpisodes = "https://api.tvmaze.com/shows/82/episodes";
 let allEpisodes = [];
 
 
 //You can edit ALL of the code here
 function setup() {
-  fetch(url)
+  fetch(urlGotEpisodes)
     .then((res) => res.json())
     .then((data) => {
       allEpisodes = data;
@@ -19,10 +19,14 @@ window.onload = setup;
 
 //initial variable (global scope)
 let list = document.createElement("ul");
-
 let count = 0;
 
-//variable to choose episodes from a list
+//variables to choose shows from select input
+const selectShowsEl = document.createElement("select");
+const SelectShowsOption = document.createElement("option");
+document.body.appendChild(selectShowsEl);
+
+//variable to choose episodes from a select input
 const select = document.createElement("select");
 const allOption = document.createElement("option");
 document.body.appendChild(select);
@@ -42,6 +46,7 @@ let inputDiv = document.createElement("div");
 inputDiv.className = "input-div";
 document.body.appendChild(inputDiv);
 
+inputDiv.appendChild(selectShowsEl);
 inputDiv.appendChild(select);
 inputDiv.appendChild(searchInput);
 inputDiv.appendChild(countSpan);
@@ -58,7 +63,13 @@ function displayEpisodes(episodes) {
     let episodeCode = `S${("0" + episode.season).slice(-2)}E${("0" + episode.number).slice(-2)}`
     title.innerHTML = `${episode.name} - ${episodeCode}`;
     image.src = episode.image.medium;
-    paragraph.innerHTML = episode.summary;
+    // paragraph.innerHTML = episode.summary.substr(0, 150);
+
+    if (episode.summary.length > 150) {
+      paragraph.innerHTML = episode.summary.substr(0, 150);
+    } else {
+      paragraph.innerHTML = episode.summary;
+    }
 
     document.body.appendChild(list);
     list.appendChild(li);
@@ -140,3 +151,13 @@ function displayDropBox(episodes) {
   })
 }
 
+
+//level 400 - display shows
+const urlAllShows = "https://api.tvmaze.com/shows";
+let allShows = [];
+
+fetch(urlAllSHows)
+  .then((response) => response.json())
+  .then((data) => {
+    allShows = data;
+  })
