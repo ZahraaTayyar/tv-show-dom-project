@@ -65,8 +65,8 @@ function displayEpisodes(episodes) {
     image.src = episode.image.medium;
     // paragraph.innerHTML = episode.summary.substr(0, 150);
 
-    if (episode.summary.length > 150) {
-      paragraph.innerHTML = `${episode.summary.substr(0, 150)}...`;
+    if (episode.summary.length > 130) {
+      paragraph.innerHTML = `${episode.summary.substr(0, 130)}...`;
     } else {
       paragraph.innerHTML = episode.summary;
     }
