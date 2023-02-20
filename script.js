@@ -1,10 +1,18 @@
-//level 350 - Get episodes from API using fetch
+const urlAllShows = "https://api.tvmaze.com/shows";
 const urlGotEpisodes = "https://api.tvmaze.com/shows/82/episodes";
+let allShows = [];
 let allEpisodes = [];
 
-
-//You can edit ALL of the code here
+//fetch shows and episodes
 function setup() {
+  fetch(urlAllShows)
+  .then((response) => response.json())
+  .then((data) => {
+    allShows = data;
+    displayShowsDropbox(allShows);
+  })
+  .catch((err) => console.log(err));
+
   fetch(urlGotEpisodes)
     .then((res) => res.json())
     .then((data) => {
@@ -19,17 +27,11 @@ window.onload = setup;
 
 //initial variable (global scope)
 let list = document.createElement("ul");
+let li = document.createElement("li");
 let count = 0;
-
-//variables to choose shows from select input
-const selectShowsEl = document.createElement("select");
-const SelectShowsOption = document.createElement("option");
-document.body.appendChild(selectShowsEl);
 
 //variable to choose episodes from a select input
 const select = document.createElement("select");
-const allOption = document.createElement("option");
-document.body.appendChild(select);
 
 //variable to input text for the search function
 const searchInput = document.createElement("input");
@@ -38,112 +40,70 @@ searchInput.placeholder = "Search";
 
 //variable to show number of episodes displayed
 let countSpan = document.createElement("span");
-document.body.appendChild(searchInput);
-document.body.appendChild(countSpan);
 
 //put input tab into one div so can style properly
 let inputDiv = document.createElement("div");
 inputDiv.className = "input-div";
-document.body.appendChild(inputDiv);
 
-inputDiv.appendChild(selectShowsEl);
+
+//append elements to body
+document.body.appendChild(inputDiv);
+//append elements to inputDiv
 inputDiv.appendChild(select);
 inputDiv.appendChild(searchInput);
 inputDiv.appendChild(countSpan);
 
 
-//level 100 - function for episodes to be displayed
-function displayEpisodes(episodes) {
-  episodes.forEach((episode) => {
-    let li = document.createElement("li");
-    let title = document.createElement("h1");
-    let image = document.createElement("img");
-    let paragraph = document.createElement("p");
-
-    let episodeCode = `S${("0" + episode.season).slice(-2)}E${("0" + episode.number).slice(-2)}`
-    title.innerHTML = `${episode.name} - ${episodeCode}`;
-    image.src = episode.image.medium;
-    // paragraph.innerHTML = episode.summary.substr(0, 150);
-
-    if (episode.summary.length > 130) {
-      paragraph.innerHTML = `${episode.summary.substr(0, 130)}...`;
-    } else {
-      paragraph.innerHTML = episode.summary;
-    }
-
-    document.body.appendChild(list);
-    list.appendChild(li);
-    li.appendChild(title);
-    li.appendChild(image);
-    li.appendChild(paragraph);
-    count++;
-  })
-}
-
-
 //level 200 - function for search input
-function displayEpisodeWithSearchBox(episodes) {
+function displayEpisodeWithSearchBox(episodes) 
+{
   displayEpisodes(episodes);
   displayDropBox(episodes);
 
-  countSpan.innerHTML = `Displaying ${count}/${episodes.length} episode(s)`
+  countSpan.innerHTML = `Displaying ${count}/${episodes.length} episode(s)`;
 
-  searchInput.addEventListener("input", () => {
+  searchInput.addEventListener("input", () => 
+  {
     const inputValue = searchInput.value.toLowerCase();
     list.innerHTML = "";
     count = 0;
 
-    episodes.forEach((episode) => {
-      if (episode.name.toLowerCase().includes(inputValue) || episode.summary.toLowerCase().includes(inputValue)) {
-        let li = document.createElement("li");
-        let title = document.createElement("h1");
-        let image = document.createElement("img");
-        let paragraph = document.createElement("p");
-
-        let episodeCode = `S${("0" + episode.season).slice(-2)}E${("0" + episode.number).slice(-2)}`
-        title.innerHTML = `${episode.name} - ${episodeCode}`;
-        image.src = episode.image.medium;
-        paragraph.innerHTML = episode.summary;
-
-        document.body.appendChild(list);
-        list.appendChild(li);
-        li.appendChild(title);
-        li.appendChild(image);
-        li.appendChild(paragraph);
-        count++;
-
+    episodes.forEach((episode) => 
+    {
+      if (episode.name.toLowerCase().includes(inputValue) || episode.summary.toLowerCase().includes(inputValue)) 
+      {
+        makeEpisodeCard(list, episode)
       }
-  })
+    })
   countSpan.innerHTML = `Displaying ${count}/${episodes.length} episode(s)`
   })
 }
 
 
-//level 300 - DropBox search bar
+//level 300 - Episode DropDown search bar
 function displayDropBox(episodes) {
+  const allOption = document.createElement("option");
   allOption.value = "All";
   allOption.innerHTML = "All episodes";
   select.appendChild(allOption);
 
-  episodes.forEach((episode) => {
-    let episodeCode = `S${("0" + episode.season).slice(-2)}E${("0" + episode.number).slice(-2)}`;
-
+  episodes.forEach((episode) => 
+  {
     const eachOption = document.createElement("option");
     eachOption.value = episode.id;
 
-    eachOption.innerHTML = `${episodeCode} - ${episode.name}`;
+    makeMediaTitleV2(select, episode);
 
-    select.appendChild(eachOption)
-
-    select.addEventListener("change", () => {
-
+    select.addEventListener("change", () => 
+    {
       let newArr = [];
+
       if (select.value === "All") {
         newArr = episodes;
       } else {
         newArr = episodes.filter(episode => select.value.includes(episode.id))
       }
-      count = 0;
+
       list.innerHTML = "";
       displayEpisodes(newArr);
       countSpan.innerHTML = `Displaying ${count}/${episodes.length} episode(s)`
@@ -151,13 +111,154 @@ function displayDropBox(episodes) {
   })
 }
 
+//level 400 - Shows dropbox
 
-//level 400 - display shows
-const urlAllShows = "https://api.tvmaze.com/shows";
-let allShows = [];
+function displayShowsDropbox(shows) 
+{
+  //variables to choose shows from select input
+  const selectShowsEl = document.createElement("select");
+  inputDiv.appendChild(selectShowsEl);
 
-fetch(urlAllSHows)
-  .then((response) => response.json())
-  .then((data) => {
-    allShows = data;
+  const selectShowsOptions = document.createElement("option");
+  selectShowsOptions.value = "All";
+  selectShowsOptions.innerHTML = "All shows";
+
+  selectShowsEl.appendChild(selectShowsOptions);
+
+  shows.forEach((show) => 
+  {
+    const selectShowsOption = document.createElement("option");
+    selectShowsOption.value = show.id;
+
+    const showName = show.name;
+    selectShowsOption.innerHTML = showName;
+    selectShowsEl.appendChild(selectShowsOption);
+
+    selectShowsEl.addEventListener("change", () => 
+    {
+      let newArr = [];
+
+      if (selectShowsEl.value === "All") {
+        newArr = shows;
+      } else {
+        newArr = shows.filter(show => selectShowsEl.value.includes(show.id))
+      }
+      
+      list.innerHTML = "";
+      displayShows(newArr);
   })
+})
+}
+
+
+  /**
+   * HELPER FUNCTIONS
+   */
+
+
+  function displayShows(shows) //level 400 - function to display shows
+  {  
+    count = 0;
+    shows.forEach((show) => 
+    {
+      makeShowCard(list, show);
+  })
+  }
+
+  function displayEpisodes(episodes) //level 100 - function for episodes to be displayed 
+  {  
+    count = 0;
+    episodes.forEach((episode) => 
+    {
+      makeEpisodeCard(list, episode);
+    })
+  }
+
+  function makeEpisodeCard(el, episode) 
+  {
+    let li = document.createElement("li");
+
+    makeEpisodeTitle(li, episode);
+
+    makeCardImage(li, episode, 'episodes-image');
+
+    makeCardSummary(li, episode);
+
+    document.body.appendChild(el);
+    el.appendChild(li);
+    count++;
+  }
+
+  function makeShowCard(el, show) {
+    let li = document.createElement("li");
+
+    makeShowTitle(li, show);
+
+    makeCardImage(li, show, 'shows-image');
+
+    makeCardSummary(li, show);
+
+    document.body.appendChild(el);
+    el.appendChild(li);
+    count++;
+  }
+
+  function makeEpisodeTitle(el, episode) 
+  {
+    let title = document.createElement("h1");
+
+    let episodeCode = `S${("0" + episode.season).slice(-2)}E${("0" + episode.number).slice(-2)}`;
+
+    title.innerHTML = `${episode.name} - ${episodeCode}`;
+
+    el.appendChild(title);
+  };
+
+  function makeShowTitle(el, show) 
+  {
+    let title = document.createElement("h1");
+    title.innerHTML = `${show.name}`;
+    el.appendChild(title);
+  }
+
+  function makeMediaTitleV2(el, media) 
+  {
+    let episodeCode = `S${("0" + media.season).slice(-2)}E${("0" + media.number).slice(-2)}`;
+
+    const eachOption = document.createElement("option");
+
+    eachOption.innerHTML = `${episodeCode} - ${media.name}`;
+
+    el.appendChild(eachOption)
+  };
+
+  function makeCardImage(el, media, className) 
+  {
+    let image = document.createElement("img");
+    image.src = media.image.medium;
+    image.className = `${className}`;
+    el.appendChild(image);
+  }
+
+  function makeCardSummary(el, media) 
+  {
+    let paragraph = document.createElement("p");
+
+    if (media.summary.length > 130) {
+      paragraph.innerHTML = `${media.summary.substr(0, 130)}...`;
+    } else {
+      paragraph.innerHTML = media.summary;
+    }
+
+    el.appendChild(paragraph);
+  }
+
+  function makeSelectEl(el, media) 
+  {
+    const selectEl = document.createElement("select");
+    el.appendChild(selectEl);
+  }
+
+  function makeOptionEl(el, media) {
+
+  }
