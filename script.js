@@ -1,5 +1,5 @@
 const urlAllShows = "https://api.tvmaze.com/shows";
-const urlGotEpisodes = "https://api.tvmaze.com/shows/82/episodes";
+const urlGotEpisodes = getUrlFromId(82);
 let allShows = [];
 let allEpisodes = [];
 
@@ -10,6 +10,7 @@ function setup() {
   .then((data) => {
     allShows = data;
     displayShowsDropbox(allShows);
+    displayShows(allShows);
   })
   .catch((err) => console.log(err));
 
@@ -25,42 +26,32 @@ function setup() {
 window.onload = setup;
 
 
-//initial variable (global scope)
-let list = document.createElement("ul");
-let li = document.createElement("li");
+/**
+ * GLOBAL VARIABLES
+ */
+
+const list = document.createElement("ul");
+const li = document.createElement("li");
 let count = 0;
-
-//variable to choose episodes from a select input
-const select = document.createElement("select");
-
-//variable to input text for the search function
-const searchInput = document.createElement("input");
-searchInput.type = "text";
-searchInput.placeholder = "Search";
-
-//variable to show number of episodes displayed
-let countSpan = document.createElement("span");
-
-//put input tab into one div so can style properly
-let inputDiv = document.createElement("div");
-inputDiv.className = "input-div";
+const countSpan = document.querySelector("span");
+const inputDiv = document.querySelector('.input-div');
+searchInput = document.querySelector('.search-input');
+const selectShowsEl = document.querySelector(".select-shows");
+const selectEpisodesEl = document.querySelector(".select-episodes");
 
 
-//append elements to body
-document.body.appendChild(inputDiv);
-//append elements to inputDiv
-inputDiv.appendChild(select);
-inputDiv.appendChild(searchInput);
-inputDiv.appendChild(countSpan);
-
+/**
+ * START FUNCTIONS
+ */
 
 //level 200 - function for search input
 function displayEpisodeWithSearchBox(episodes) 
 {
-  displayEpisodes(episodes);
   displayDropBox(episodes);
 
   countSpan.innerHTML = `Displaying ${count}/${episodes.length} episode(s)`;
+
+  searchInput = document.querySelector('.search-input');
 
   searchInput.addEventListener("input", () => 
   {
@@ -72,7 +63,7 @@ function displayEpisodeWithSearchBox(episodes)
     {
       if (episode.name.toLowerCase().includes(inputValue) || episode.summary.toLowerCase().includes(inputValue)) 
       {
-        makeEpisodeCard(list, episode)
+        makeEpisodeCard(list, episode);
       }
     })
   countSpan.innerHTML = `Displaying ${count}/${episodes.length} episode(s)`
@@ -81,29 +72,29 @@ function displayEpisodeWithSearchBox(episodes)
 
 
 //level 300 - Episode DropDown search bar
-function displayDropBox(episodes) {
-  const allOption = document.createElement("option");
+function displayDropBox(episodes) 
+{
+  const allOption = document.querySelector(".episode-option");
   allOption.value = "All";
-  allOption.innerHTML = "All episodes";
-  select.appendChild(allOption);
 
   episodes.forEach((episode) => 
   {
     const eachOption = document.createElement("option");
     eachOption.value = episode.id;
 
-    makeMediaTitleV2(select, episode);
+    makeMediaTitleV2(selectEpisodesEl, episode);
 
-    select.addEventListener("change", () => 
+    selectEpisodesEl.addEventListener("change", () => 
     {
       let newArr = [];
 
-      if (select.value === "All") {
+      if (selectEpisodesEl.value === "All") {
         newArr = episodes;
       } else {
-        newArr = episodes.filter(episode => select.value.includes(episode.id))
+        //something is wrong with the below part of the if statement.
+        newArr = episodes.filter(episode => selectEpisodesEl.value.includes(episode.id));
       }
-
+      // count = 0;
       list.innerHTML = "";
       displayEpisodes(newArr);
       countSpan.innerHTML = `Displaying ${count}/${episodes.length} episode(s)`
@@ -115,15 +106,8 @@ function displayDropBox(episodes) {
 
 function displayShowsDropbox(shows) 
 {
-  //variables to choose shows from select input
-  const selectShowsEl = document.createElement("select");
-  inputDiv.appendChild(selectShowsEl);
-
-  const selectShowsOptions = document.createElement("option");
+  const selectShowsOptions = document.querySelector(".show-option");
   selectShowsOptions.value = "All";
-  selectShowsOptions.innerHTML = "All shows";
-
-  selectShowsEl.appendChild(selectShowsOptions);
 
   shows.forEach((show) => 
   {
@@ -143,10 +127,12 @@ function displayShowsDropbox(shows)
       } else {
         newArr = shows.filter(show => selectShowsEl.value.includes(show.id))
       }
-      
+
       list.innerHTML = "";
       displayShows(newArr);
-  })
+
+      countSpan.innerHTML = `Displaying ${count}/${shows.length} show(s)`;
+    })
 })
 }
 
@@ -156,16 +142,17 @@ function displayShowsDropbox(shows)
    */
 
 
-  function displayShows(shows) //level 400 - function to display shows
+  function displayShows(shows)
   {  
     count = 0;
     shows.forEach((show) => 
     {
       makeShowCard(list, show);
-  })
+    })
+    countSpan.innerHTML = `Displaying ${count}/${shows.length} show(s)`
   }
 
-  function displayEpisodes(episodes) //level 100 - function for episodes to be displayed 
+  function displayEpisodes(episodes) 
   {  
     count = 0;
     episodes.forEach((episode) => 
@@ -253,12 +240,29 @@ function displayShowsDropbox(shows)
     el.appendChild(paragraph);
   }
 
-  function makeSelectEl(el, media) 
+  function getUrlFromId(id) 
   {
-    const selectEl = document.createElement("select");
-    el.appendChild(selectEl);
+    return `https://api.tvmaze.com/shows/${id}/episodes`;
   }
 
-  function makeOptionEl(el, media) {
 
+  //functions for count to be displayed - yet to be used - breaks code each time i use it, need to fix
+
+  function displayEpisodeCount() 
+  {
+    countSpan.innerHTML = `Displaying ${count}/${episodes.length} episode(s)`;
   }
+
+  function displayShowCount() {
+    countSpan.innerHTML = `Displaying ${count}/${shows.length} show(s)`;
+  }
+
+
+/**
+ * EVENT LISTENERS
+ */
+
+// selectShowsEl.addEventListener("change", (e) => {
+//   const showIdSelectedByUser = Number(e.target.value);
+//   const nextFetchUrl = getUrlFromId(showIdSelectedByUser);
+// })

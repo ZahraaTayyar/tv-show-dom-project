@@ -13,6 +13,7 @@ header {
   /* border-bottom: 3px white solid; */
   margin-bottom: 50px;
   height: 75px;
+  -webkit-border-bottom-left-radius: 50px;
 }
 
 header p {
@@ -31,6 +32,7 @@ select {
   background-color: #E7D2CC;
   width: 20rem;
   padding: 10px;
+  cursor: pointer;
 }
 
 select:hover {
@@ -92,6 +94,7 @@ li {
   height: 430px;
   background: linear-gradient(to top, white 320px, #E7D2CC 70px);
   box-shadow: 3px 3px 20px #868B8E;
+  cursor: pointer;
 }
 
 li:hover {
